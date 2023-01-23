@@ -73,12 +73,14 @@ NOTE: MicroStack is in a beta state. We encourage you to test it, give us your f
 Installation
 The installation step consists solely of installing the MicroStack snap.
 
-Requirements:
+### Requirements
+
 You will need a multi-core processor and at least 8 GiB of memory and 100 GiB of disk space. MicroStack has been tested on x86-based physical and virtual (KVM) machines running either Ubuntu 18.04 LTS or Ubuntu 20.04 LTS.
 
 At this time use the beta channel:
 
-sudo snap install microstack --beta
+`sudo snap install microstack --beta`
+
 Install the snap on the machine designate as the control node and on any machines designated as compute nodes.
 
 Information on the installed snap can be viewed like this:
@@ -95,6 +97,7 @@ Perform this step on the machine designated as the control node.
 The control node initialisation step automatically deploys, configures, and starts OpenStack services. In particular, it will create the database, networks, an image, several flavors, and ICMP/SSH security groups. This can all be done within 10 to 20 minutes depending on your machine:
 
 `sudo microstack init --auto --control`
+
 When finished, generate a connection string that a designated compute node will need in order to join the cluster:
 
 
@@ -170,35 +173,35 @@ Allocating floating ip ...
 Server test launched! (status is BUILD)
 
 Access it with `ssh -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204`
-Important:
+
+**Important:**
+
 When connecting to the instance over SSH from a compute node, OpenStack security groups will need to be configured.
 
 From the control node, access the instance using the private SSH key associated with the default keypair:
 
-ssh -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204
-Note:
-If you receive the error message sign_and_send_pubkey: no mutual signature supported then you will need to use the PubkeyAcceptedKeyTypes option to allow for older key types. The complete command will look like this: ssh -o "PubkeyAcceptedKeyTypes +ssh-rsa" -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204
+`ssh -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204`
 
-Access the cloud dashboard
+Note:
+
+If you receive the error message sign_and_send_pubkey: no mutual signature supported then you will need to use the PubkeyAcceptedKeyTypes option to allow for older key types. The complete command will look like this: `ssh -o "PubkeyAcceptedKeyTypes +ssh-rsa" -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204`
+
+### Access the cloud dashboard
+
 You can log in to the web UI by pointing your browser to the following URL:
 
 https://10.20.20.1
 
 The username is ‘admin’ and the password is obtained in this way:
 
-sudo snap get microstack config.credentials.keystone-password
-Sample password:
-
-OXUJ4zZWTTCuPetUQbbBm3LFL2IWXioK
-
+`sudo snap get microstack config.credentials.keystone-password`
 
 
 
 ## BOINC 
 
 
-
-## Requirements
+### Requirements
 
 If you are hosting your server on a Linux machine, the requirements are,
 
@@ -221,7 +224,7 @@ There are no other dependencies, as everything else is packaged inside of Docker
 
 The server itself runs Linux. On Windows/Mac, Docker does the job of transparently virtualizing a Linux machine for you. The commands given in this guide should be run from your system's native terminal, unless you are running Docker Toolbox, in which case they should be run from the "Docker Quickstart Terminal" (and on Windows you will need to add `.exe` to the end, e.g. `docker.exe` instead of `docker`).
 
-## Launching a test server
+### Launching a test server
 
 Before creating your real project, lets launch a sample test server to see how it works. To do this, get the `boinc-server-docker` source code, 
 
