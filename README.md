@@ -41,7 +41,7 @@ thanks to the magic of Wireguard.
 
 Alternative Tunnels : https://github.com/anderspitman/awesome-tunneling
 
-## Usage
+### Usage
 
 To start a tunnel for your local service on port 8080
 > Remember to bind your local service to 0.0.0.0
@@ -57,7 +57,7 @@ wg-quick down ./tunnel.conf
 ```
 
 
-## Self-hosting
+### Self-hosting
 
 Requirements: `python >= 3.9`, `poetry`, `wireguard`, `caddy`.
 
@@ -66,6 +66,132 @@ included in the repository as well.
 
 
 ## OpenStack
+
+These instructions use MicroStack ‐ in a snap. MicroStack is a pure upstream OpenStack distribution, designed for small scale and edge deployments, that can be installed and maintained with a minimal effort.
+
+NOTE: MicroStack is in a beta state. We encourage you to test it, give us your feedback and ask questions.
+Installation
+The installation step consists solely of installing the MicroStack snap.
+
+Requirements:
+You will need a multi-core processor and at least 8 GiB of memory and 100 GiB of disk space. MicroStack has been tested on x86-based physical and virtual (KVM) machines running either Ubuntu 18.04 LTS or Ubuntu 20.04 LTS.
+
+At this time use the beta channel:
+
+sudo snap install microstack --beta
+Install the snap on the machine designate as the control node and on any machines designated as compute nodes.
+
+Information on the installed snap can be viewed like this:
+
+`snap list microstack`
+
+
+### Initialisation
+Both the control node and the compute nodes must be initialised.
+
+### Control node
+Perform this step on the machine designated as the control node.
+
+The control node initialisation step automatically deploys, configures, and starts OpenStack services. In particular, it will create the database, networks, an image, several flavors, and ICMP/SSH security groups. This can all be done within 10 to 20 minutes depending on your machine:
+
+`sudo microstack init --auto --control`
+When finished, generate a connection string that a designated compute node will need in order to join the cluster:
+
+
+### Compute node
+Perform this step on a machine designated as a compute node using the previously generated connection string.
+
+Since the compute node only manages the OpenStack compute service a compute node’s initialisation step is much shorter than that of a control node’s. It can take as little as 30 seconds for a compute node to join the cluster:
+
+`sudo microstack init --auto --compute --join <connection-string>`
+
+Note:
+Each additional compute node will require a new connection string to be generated. Add as many compute nodes as desired by repeating the join process.
+
+### Verification 
+
+The purpose of the verification step is to confirm that the cloud is in working order and to discover some of the defaults used by MicroStack. Verification will consist of the following actions:
+
+- perform various OpenStack queries
+- create an instance
+- connect to the instance over SSH
+- access the cloud dashboard
+- Query OpenStack
+
+The commands in this section can be invoked on either the control node or on a compute node.
+
+The standard openstack client comes pre-installed and is invoked like so:
+
+`microstack.openstack <command>`
+
+To list the default image:
+
+`microstack.openstack image list`
+
+
+To get the default list of flavors:
+
+`microstack.openstack flavor list`
+
+Create an instance
+The commands in this section can be invoked on either the control node or on a compute node.
+
+MicroStack comes with a convenient instance creation command called microstack launch. It uses the following defaults for its instances:
+
+keypair ‘microstack’
+flavor ‘m1.tiny’
+floating IP address on subnet ‘10.20.20.0/24’
+The instance will be created on a compute node that the creating node sees as an availability zone, which in turn is based on hypervisor names.
+
+To get the list of hypervisors:
+
+microstack.openstack hypervisor list
+
+
+There should be at least two. One that is bundled with the control node and one for each compute node.
+
+Important:
+To create an instance from a compute node you will need to first manually import an OpenStack keypair (i.e. ssh-keygen and microstack.openstack keypair create).
+
+From the control node, to create an instance (on hypervisor ‘pmatulis-ss-mstack-2’) named ‘test’ that is based on the ‘cirros’ image:
+
+microstack launch cirros --name test --availability-zone nova:pmatulis-ss-mstack-2.project.serverstack
+The microstack launch command also supports arguments --key, --flavor, --image, and --net-id, in which case you will need to create objects using the standard client if non-default values are desired.
+
+Note:
+The launch command can be replaced with the traditional microstack.openstack server create command.
+
+Connect to the instance
+Output from the microstack launch command includes all the information needed to connect to the instance over SSH:
+
+Creating local "microstack" ssh key at /home/ubuntu/snap/microstack/common/.ssh/id_microstack
+Launching server ...
+Allocating floating ip ...
+Server test launched! (status is BUILD)
+
+Access it with `ssh -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204`
+Important:
+When connecting to the instance over SSH from a compute node, OpenStack security groups will need to be configured.
+
+From the control node, access the instance using the private SSH key associated with the default keypair:
+
+ssh -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204
+Note:
+If you receive the error message sign_and_send_pubkey: no mutual signature supported then you will need to use the PubkeyAcceptedKeyTypes option to allow for older key types. The complete command will look like this: ssh -o "PubkeyAcceptedKeyTypes +ssh-rsa" -i /home/ubuntu/snap/microstack/common/.ssh/id_microstack cirros@10.20.20.204
+
+Access the cloud dashboard
+You can log in to the web UI by pointing your browser to the following URL:
+
+https://10.20.20.1
+
+The username is ‘admin’ and the password is obtained in this way:
+
+sudo snap get microstack config.credentials.keystone-password
+Sample password:
+
+OXUJ4zZWTTCuPetUQbbBm3LFL2IWXioK
+
+
 
 
 ## BOINC 
