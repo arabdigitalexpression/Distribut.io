@@ -4,12 +4,14 @@
 
 
 
+
 # Architecture 
 
 ## Distribut.io 
-
+<img width="749" alt="Screen Shot 2023-01-23 at 7 24 48 PM" src="https://user-images.githubusercontent.com/13450068/214107343-13b94f68-a5d5-4250-910e-a17d052d283f.png">
 
 ## Tunnel 
+![image](https://user-images.githubusercontent.com/13450068/214107042-fa82df1c-4507-411e-91eb-be6e40e6f650.png)
 
 
 ## BOINC 
@@ -27,19 +29,17 @@
 
 # Installation 
 
-## Tunnel
-
-# tunnel.pyjam.as
+## Tunnel (based on tunnel.pyjam.as)
 
 Public instance: [https://tunnel.pyjam.as/](https://tunnel.pyjam.as/)
 
 `tunnel.pyjam.as` can be used as an ephemeral reverse proxy for your local
-services. This may be useful, for instance when you need to show your friend
-something cool you've built.
+services.
 
 `tunnel.pyjam.as` works without installing any software on your machine,
 thanks to the magic of Wireguard.
 
+Alternative Tunnels : https://github.com/anderspitman/awesome-tunneling
 
 ## Usage
 
@@ -65,11 +65,12 @@ Use `poetry` to install the dependencies. There is a systemd service
 included in the repository as well.
 
 
+## OpenStack
+
 
 ## BOINC 
 
 
-## OpenStack
 
 ## Requirements
 
