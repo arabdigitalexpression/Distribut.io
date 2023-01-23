@@ -6,6 +6,12 @@
 
 # Architecture 
 
+## Distribut.io 
+
+
+## Tunnel 
+
+
 ## BOINC 
 
 ![Test](https://upload.wikimedia.org/wikipedia/commons/9/94/Boincarchitecture.png)
@@ -16,10 +22,48 @@
 ![image](https://user-images.githubusercontent.com/13450068/214103251-0c74535f-697e-4f9c-af53-bfe010fd6443.png)
 
 ### OpenStack Services
-![image](https://user-images.githubusercontent.com/13450068/214101879-ade66e79-8db5-4855-8a87-5d468a55b473.png)
+![image](https://www.freecodecamp.org/news/content/images/2022/04/openstack-map.svg)
 
 
 # Installation 
+
+## Tunnel
+
+# tunnel.pyjam.as
+
+Public instance: [https://tunnel.pyjam.as/](https://tunnel.pyjam.as/)
+
+`tunnel.pyjam.as` can be used as an ephemeral reverse proxy for your local
+services. This may be useful, for instance when you need to show your friend
+something cool you've built.
+
+`tunnel.pyjam.as` works without installing any software on your machine,
+thanks to the magic of Wireguard.
+
+
+## Usage
+
+To start a tunnel for your local service on port 8080
+> Remember to bind your local service to 0.0.0.0
+
+```
+curl https://tunnel.pyjam.as/8080 > tunnel.conf && wg-quick up ./tunnel.conf
+```
+
+To stop your tunnel
+
+```
+wg-quick down ./tunnel.conf
+```
+
+
+## Self-hosting
+
+Requirements: `python >= 3.9`, `poetry`, `wireguard`, `caddy`.
+
+Use `poetry` to install the dependencies. There is a systemd service
+included in the repository as well.
+
 
 
 ## BOINC 
